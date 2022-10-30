@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.3.0/billboard.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.3.0/billboard.min.css" />
+<!-- <style>
+	div.chart { width: 90%; margin: auto; }
+	body { font-family: sans-serif; margin: 1em; }
+	</style> -->
+</head>
+
+<body>
+    <h1>This is a plotly tester</h1>
+    <div id="tester" style="width:100%;height:600px;"></div>
+
+    <div class="chart" id="covid-all-us-cases" style="width:100%;height:600px;"></div>
+
+    <script>
+        data = document.getElementById('tester');
+        Plotly.newPlot(data, [{
+            
+        }], {
+            margin: {
+                t: 0
+            }
+        });
+
+        var api = 'https://disease.sh/v3/covid-19/nyt/usa';
+        fetch(api)
+            .then(response => response.json())
+            .then(data => {
+                plotData(data);
+            });
+
+            function plotData(data) {
+	var keys = data.map(a => a.date),
+		cases = data.map(a => a.cases);
+
+	keys.unshift("dates");
+	cases.unshift("cases");
+
+	bb.generate({
+	    bindto: "#covid-all-us-cases",
+	    data: {
+	    	x: "dates",
+	        type: "line",
+	        columns: [ keys, cases ]
+  	    },
+	    axis: {
+	    	x: {
+	    		type: "category",
+	    		tick: {
+	    			count: 10
+	    		}
+	    	}
+	    },
+	    padding: { right: 50 }
+	});
+}
+
+//         bb.generate({
+//  bindto: "#covid-all-us-cases",
+//  data: {
+//  type: "line",
+//  columns: [
+//  [ "data", 10, 40, 20 ]
+//  ]
+//  }
+// });
+
+
+
+// var keys = data.map(a => a.date),
+//  cases = data.map(a => a.cases);
+// keys.unshift("dates");
+// cases.unshift("cases");
+
+
+    </script>
+</body>
+
+</html>
